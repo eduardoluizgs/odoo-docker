@@ -127,3 +127,24 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# odoo
+.DS_Store
+*~
+*.pyc
+*.sqlite
+*.TODO
+*.pid
+*.rdb
+.idea
+.backup
+odoo-*.conf
+.venv/
+root/project/addons/*
+!root/project/addons/.gitkeep
+root/project/odoo/*
+!root/project/odoo/.gitkeep
+root/storage/files/*
+!root/storage/files/.gitkeep
+root/storage/temp/*
+!root/storage/temp/.gitkeep

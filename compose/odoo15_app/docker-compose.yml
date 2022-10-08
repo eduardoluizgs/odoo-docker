@@ -1,0 +1,53 @@
+version: '3.3'
+
+networks:
+  default:
+    external:
+      name: containers-network                    # Must be exists in docker
+
+services:
+
+  odoo15_app:
+    container_name: odoo15_app
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        reservations:
+          cpus: '0.00'
+          memory: 0M
+        limits:
+          cpus: '0.5'
+          memory: 1000M
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: odoo15:20221005
+    entrypoint: "/entrypoint.sh ${COMMAND}"
+    volumes:
+      - ../../odoo.conf:/etc/odoo/odoo.conf            # Odoo Conf
+      - ../../root/project/addons:/mnt/extra-addons    # Odoo Addons Extra
+      - odoo15app_cache:/var/lib/odoo                  # Odoo Data
+      #- ../../root/storage:/opt/storage               # Odoo Storage
+      - ../../entrypoint.sh:/entrypoint.sh             # Odoo entrypoint
+      - ../../odoo:/usr/bin/odoo                       # Odoo Bin
+      # /usr/local/lib                                 # Python Files
+      # /usr/lib/python3/dist-packages/odoo            # Odoo Modules
+      # /var/log/odoo/odoo.log                         # Odoo Logs
+    ports:
+      - 8069:8069     # odoo web
+      - 5678:5678     # odoo debug
+      - 8071:8071     # odoo rpc
+      - 8072:8072     # odoo longpolling
+    environment:
+      - HOST=odoo15_db
+      - PORT=5432
+      - USER=odoo
+      - PASSWORD=odoo
+      - DATABASE=odoo15
+      - INIT_DATABASE=${INIT_DATABASE}
+      - MODULES=${MODULES}
+      - UPDATE=${UPDATE}
+
+volumes:
+  odoo15app_cache:

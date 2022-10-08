@@ -1,0 +1,33 @@
+version: '3.3'
+
+networks:
+  default:
+    external:
+      name: containers-network
+
+services:
+  odoo15_db:
+    container_name: odoo15_db
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        reservations:
+          cpus: '0.0'
+          memory: 0M
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_DB=odoo15
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+
+volumes:
+  postgresql_data:
