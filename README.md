@@ -66,12 +66,12 @@ Em seguida, clonar os repositórios customizados para a pasta `addons`:
 ```shell
 cd root/project/addons
 
-git clone https://github.com/eduardoluizgs/Odoo-15-Docker
+git clone https://github.com/eduardoluizgs/odoo-15-manager-task
 ```
 
 Em seguinda, copie os arquivos de `addons auxiliares` disponível no arquivo `addons.rar` para a pasta `root/project/addons`.
 
-Em seguida, crie a rede que irá conectar os conatainers:
+Em seguida, crie a rede que irá conectar os containers:
 
 ```shell
 docker network create --driver bridge containers-network
@@ -81,6 +81,14 @@ Em seguida, crie a imagem base do `Odoo 15`:
 
 ```shell
 docker build -t odoo15:20221005 .
+```
+
+Em seguida, forneça as permissões aos arquivos e pastas:
+
+```shell
+sudo chmod 777 odoo
+sudo chmod 777 entrypoint.sh
+sudo chmod 777 root/storage/
 ```
 
 Em seguida, suba o docker-compose do `Postgres`:
@@ -94,25 +102,17 @@ docker-compose up -d
 Se for a primeira vez que você está iniciando o projeto, inicializa o banco de dados:
 
 ```shell
-cd compose/odoo15_db
+cd compose/odoo15_app
 
 docker-compose --env-file .env-init-database up
 ```
 
-Em seguda, suba o docker-compose da aplicação:
+Em seguida, suba o docker-compose da aplicação:
 
 ```shell
 cd compose/odoo15_app
 
 docker-compose up -d
-```
-
-Em seguida, forneça as permissões aos arquivos e pastas:
-
-```shell
-sudo chmod 777 odoo
-sudo chmod 777 entrypoint.sh
-sudo chmod 777 root/storage/files/
 ```
 
 Para finalizar, teste o acesso a aplicação acessando o endereço [http://localhost:8069](http://localhost:8069) com o usuário `admin` e senha `admin`.
