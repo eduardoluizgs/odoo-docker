@@ -8,7 +8,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
@@ -102,7 +101,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+./.env
 .venv
 env/
 venv/
@@ -137,14 +136,18 @@ dmypy.json
 *.pid
 *.rdb
 .idea
-.backup
-odoo-*.conf
+.backup/*
+!.backup/.gitkeep
 .venv/
-root/project/addons/*
-!root/project/addons/.gitkeep
-root/project/odoo/*
-!root/project/odoo/.gitkeep
-root/storage/files/*
-!root/storage/files/.gitkeep
-root/storage/temp/*
-!root/storage/temp/.gitkeep
+.tmp/*
+!.tmp/.gitkeep
+.cache/*
+!.cache/.gitkeep
+!.tmp/.gitkeep
+addons/*
+!/addons/.gitkeep
+odoo/*
+!odoo/.gitkeep
+storage/*
+!storage/.gitkeep
+*.orig

@@ -1,0 +1,51 @@
+version: '3.3'
+
+networks:
+  containers-network: # Must be exists in docker
+    external: true
+
+services:
+
+  odoo_appname_debug:
+    container_name: odoo_appname_debug
+    deploy:
+      restart_policy:
+        condition: 'none'
+      resources:
+        reservations:
+          memory: 0M
+        limits:
+          cpus: '0.5'
+          memory: 1000M
+    build:
+      context: ./build/odoo
+      dockerfile: Dockerfile
+    image: ${ODOO_IMAGE}
+    entrypoint: "/entrypoint.sh ${COMMAND:-odoo}"
+    volumes:
+      - ./addons:/mnt/extra-addons                            # Odoo Addons Extra
+      # - ./storage:/opt/storage                              # Odoo Storage
+      - odooapp_cache:/var/lib/odoo                           # Odoo Data
+      - ./build/odoo/odoo.conf:/etc/odoo/odoo.conf            # Odoo Conf
+      - ./build/odoo/${ODOO_ENTRYPOINT}:/entrypoint.sh        # Odoo entrypoint
+      - ./build/odoo/odoo:/usr/bin/odoo                       # Odoo Bin
+      # /usr/local/lib                                        # Python Files
+      # /usr/lib/python3/dist-packages/odoo                   # Odoo Modules
+      # /var/log/odoo/odoo.log                                # Odoo Logs
+    ports:
+      - 8069:8069     # odoo web
+      - 8071:8071     # odoo rpc
+      - 8072:8072     # odoo longpolling
+      - 5678:5678     # odoo debug
+    environment:
+      - HOST=odoo_appname_postgres
+      - PORT=5432
+      - USER=odoo
+      - PASSWORD=odoo
+      - DATABASE=${ODOO_DATABASE}
+      - INIT_DATABASE=${INIT_DATABASE}
+      - MODULES=${MODULES}
+      - UPDATE=${UPDATE}
+
+volumes:
+  odooapp_cache:

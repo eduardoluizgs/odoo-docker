@@ -1,0 +1,20 @@
+{
+  "file-alias.listFile": "file-alias.json",
+  "search.useIgnoreFiles": false,
+  "search.exclude": {
+    "**/project/odoo/**": true,
+    "**/root/log/**": true,
+    "**/root/storage/**": true,
+  },
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#714B67",
+    "titleBar.border": "#ebe8e8",
+    "titleBar.inactiveBackground": "#714B67",
+    "titleBar.activeForeground": "#ebe8e8",
+    "statusBar.background": "#714B67",
+    "statusBar.debuggingBackground": "#714B67",
+    "statusBar.noFolderBackground": "#714B67",
+    "statussBar.prominentBackground": "#714B67",
+    "statusBar.foreground": "#ebe8e8"
+  }
+}

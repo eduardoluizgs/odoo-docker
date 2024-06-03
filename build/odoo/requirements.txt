@@ -1,0 +1,4 @@
+pymssql==2.2.7
+
+# debug
+debugpy==1.6.2
