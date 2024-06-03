@@ -1,4 +1,4 @@
-# Odoo 16 - Docker Development
+# Odoo 17 - Docker Development
 
 Este projeto é baseado na plataforma [Odoo](https://www.odoo.com/pt_BR), e contém um repositório com estrutura de projeto `Docker` para desenvolvimento e debug com o `VSCode`.
 
@@ -55,13 +55,13 @@ Pré-Requisitos:
 Primeiro, realize o clone deste [repositório](https://github.com/eduardoluizgs/odoo-docker) para a sua pasta de `projetos`:
 
 ```shell
-git clone https://github.com/eduardoluizgs/odoo-docker -b 16.0
+git clone https://github.com/eduardoluizgs/odoo-docker -b 17.0
 ```
 
-Em seguinda clone o repositório oficial do [Odoo 16](https://github.com/odoo/odoo/tree/16.0) para a pasta raiz do projeto:
+Em seguinda clone o repositório oficial do [Odoo 17](https://github.com/odoo/odoo/tree/17.0) para a pasta raiz do projeto:
 
 ```shell
-git clone https://github.com/odoo/odoo.git -b 16.0
+git clone https://github.com/odoo/odoo.git -b 17.0
 ```
 
 Em seguida, clone os repositórios customizados (se existir) para a pasta `./addons`:
@@ -86,6 +86,7 @@ sudo chmod 777 ./storage
 
 sudo chmod +x ./build/odoo/odoo
 sudo chmod +x ./build/odoo/entrypoint.sh
+sudo chmod +x ./build/odoo/wait-for-psql.py
 
 sudo chmod +x ./run-debug.sh
 sudo chmod +x ./run-init-database.sh
@@ -174,13 +175,13 @@ Caso existe erros de compilação dos assets ou attachments, execute o comando a
 
 ```shell
   ...
-  File "/opt/bitnami/odoo/lib/odoo-16.0.post20230815-py3.10.egg/odoo/addons/web/controllers/binary.py", line 109, in content_assets
+  File "/opt/bitnami/odoo/lib/odoo-17.0.post20230815-py3.10.egg/odoo/addons/web/controllers/binary.py", line 109, in content_assets
     stream = request.env['ir.binary']._get_stream_from(record, 'raw', filename)
-  File "/opt/bitnami/odoo/lib/odoo-16.0.post20230815-py3.10.egg/odoo/addons/base/models/ir_binary.py", line 129, in _get_stream_from
+  File "/opt/bitnami/odoo/lib/odoo-17.0.post20230815-py3.10.egg/odoo/addons/base/models/ir_binary.py", line 129, in _get_stream_from
     stream = self._record_to_stream(record, field_name)
-  File "/opt/bitnami/odoo/lib/odoo-16.0.post20230815-py3.10.egg/odoo/addons/base/models/ir_binary.py", line 73, in _record_to_stream
+  File "/opt/bitnami/odoo/lib/odoo-17.0.post20230815-py3.10.egg/odoo/addons/base/models/ir_binary.py", line 73, in _record_to_stream
     return Stream.from_attachment(record)
-  File "/opt/bitnami/odoo/lib/odoo-16.0.post20230815-py3.10.egg/odoo/http.py", line 473, in from_attachment
+  File "/opt/bitnami/odoo/lib/odoo-17.0.post20230815-py3.10.egg/odoo/http.py", line 473, in from_attachment
     stat = os.stat(self.path)
 FileNotFoundError: [Errno 2] No such file or directory: '/bitnami/odoo/data/filestore/odoo_future_prd/c4/c4a07f0cce7c9f19e94878dbf426741253ec45a1'
 2024-05-23 20:48:01,049 1 INFO odoo_future_prd werkzeug: 10.244.0.0 - - [23/May/2024 20:48:01] "GET /web/assets/54-bb08df2/web.assets_frontend.min.css HTTP/1.1" 500 - 9 0.014 0.042
@@ -263,13 +264,13 @@ docker-compose down
 ## Links
 
 * Essencial para trabalhar bem como Odoo:
-  * [Odoo ORM API](https://www.odoo.com/documentation/16.0/developer/reference/backend/orm.html)
-  * [Odoo View](https://www.odoo.com/documentation/16.0/developer/reference/backend/views.html)
-  * [Odoo Actions](https://www.odoo.com/documentation/16.0/developer/reference/backend/actions.html)
+  * [Odoo ORM API](https://www.odoo.com/documentation/17.0/developer/reference/backend/orm.html)
+  * [Odoo View](https://www.odoo.com/documentation/17.0/developer/reference/backend/views.html)
+  * [Odoo Actions](https://www.odoo.com/documentation/17.0/developer/reference/backend/actions.html)
 * Instalação:
   * [Odoo Get Starter Repository](https://github.com/eduardoluizgs/OdooGetStarter)
   * [Odoo Docker Hub](https://hub.docker.com/_/odoo)
-  * [Odoo Standalone Install](https://www.odoo.com/documentation/16.0/administration/install.html)
+  * [Odoo Standalone Install](https://www.odoo.com/documentation/17.0/administration/install.html)
   * [Install Odoo 16 using Docker, Nginx on Ubuntu 22.04](https://www.cloudbooklet.com/install-odoo-16-using-docker-nginx-on-ubuntu-22-04/)
 * Documentação:
-  * [Odoo Docs](https://www.odoo.com/documentation/16.0/developer.html)
+  * [Odoo Docs](https://www.odoo.com/documentation/17.0/developer.html)
