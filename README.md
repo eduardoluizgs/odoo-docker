@@ -71,7 +71,7 @@ cd ./addons
 git clone <url-do-repositorio>.git
 ```
 
-Em seguinda, copie os arquivos de `addons auxiliares` no arquivo `./addons.rar` ou `./addons.tar.gz` (se existir) para a pasta `./addons`.
+Em seguinda, copie os arquivos de `addons auxiliares` no arquivo `./addons.zip`, `./addons.rar` ou `./addons.tar.gz` (se existir) para a pasta `./addons`.
 
 Em seguida, crie a rede que irá conectar os containers:
 
