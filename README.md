@@ -261,6 +261,12 @@ make stop
 docker-compose down
 ```
 
+## Gerando código automaticamente
+
+Este repositório contém um gerador de código automático. Para utilizar o gerador basta utilizar o atalho `CTRL+SHIFT+P` e escolher `Tasks: Run Task > odoo-build-model-and-view`. Siga os passos do assistente e ao final verifique os arquivos gerados na pasta `./addons/<module_name>/models` e `./addons/<module_name>/views`.
+
+Caso queira customizar o gerador, basta alterar o arquivo [./build/builder/template_builder.py](./build/builder/template_builder.py).
+
 ## Links
 
 * Essencial para trabalhar bem como Odoo:
