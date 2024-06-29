@@ -1,0 +1,25 @@
+from odoo import models, fields
+
+
+class {{capitalized_model_name}}Model(models.Model):
+
+    # ----------------------------------------------------
+    #
+    # Model Definition
+    #
+    # ----------------------------------------------------
+
+    _name = '{{long_model_name}}'
+    _description = '{{model_description}}'
+    _order = "name"
+
+    # ----------------------------------------------------
+    #
+    # Fields
+    #
+    # ----------------------------------------------------
+
+    name = fields.Char(
+        string='Nome',
+        required=True
+    )

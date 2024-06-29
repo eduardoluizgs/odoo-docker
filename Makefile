@@ -62,7 +62,7 @@ update-all:
 update:
 	COMMAND=odoo \
 	UPDATE=Y \
-	MODULES= \
+	MODULES=odoo_sample_module \
 	INIT_DATABASE=N \
 	docker compose --file=docker-compose-debug-vscode.yml up
 

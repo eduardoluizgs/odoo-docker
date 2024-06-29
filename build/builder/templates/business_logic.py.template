@@ -1,0 +1,16 @@
+{{model_name}}
+
+from odoo import api, models, fields, tools, _
+from odoo.exceptions import ValidationError
+
+
+class {{capitalized_model_name}}BusinessLogic(models.Model):
+
+    # ----------------------------------------------------
+    #
+    # Model Definition
+    #
+    # ----------------------------------------------------
+
+    _name = '{{long_model_name}}'
+    _inherit = ['{{long_model_name}}']

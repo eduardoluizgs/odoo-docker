@@ -124,6 +124,48 @@
           }
         }
       ]
+    },
+    {
+      "label": "odoo-build-model-and-view",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "problemMatcher": "$tsc",
+      "options": {
+          "env": {}
+      },
+      "args": [
+          "${workspaceFolder}/build/builder/template_builder.py",
+          "--template_type",
+          "model-and-view",
+          "--output_folder",
+          "${workspaceFolder}/addons",
+          "--module_name",
+          "${input:module_name}",
+          "--model_name",
+          "${input:model_name}",
+          "--model_description",
+          "${input:model_description}"
+      ]
     }
-  ]
+  ],
+  "inputs": [
+      {
+        "id": "model_name",
+        "description": "Informe o nome reduzido do modelo. Ex: metodo_pagamento...",
+        "type": "promptString"
+      },
+      {
+        "id": "model_description",
+        "description": "Informe a descrição o modelo. Ex: Métodos de Pagamento...",
+        "type": "promptString"
+      },
+      {
+          "id": "module_name",
+          "description": "Selecione o modulo...",
+          "type": "pickString",
+          "options": [
+              "odoo_sample_module"
+          ]
+      }
+    ]
 }
