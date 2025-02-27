@@ -1,5 +1,5 @@
 # ************************************************************************************
-#                                  Odoo 17 Docker
+#                                  Odoo 18 Docker
 # ************************************************************************************
 #
 # Odoo Files Reference:
@@ -13,8 +13,8 @@
 #
 # ************************************************************************************
 
-FROM ubuntu:jammy
-LABEL Odoo S.A. <info@odoo.com>
+FROM ubuntu:noble
+MAINTAINER Odoo S.A. <info@odoo.com>
 
 SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 
@@ -52,7 +52,7 @@ RUN apt-get update && \
         python3-xlrd \
         python3-xlwt \
         xz-utils \
-        netcat && \
+        netcat-openbsd && \
     if [ -z "${TARGETARCH}" ]; then \
         TARGETARCH="$(dpkg --print-architecture)"; \
     fi; \
@@ -68,7 +68,7 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
 # install latest postgresql-client
-RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ jammy-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
+RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ noble-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
     && GNUPGHOME="$(mktemp -d)" \
     && export GNUPGHOME \
     && repokey='B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8' \
@@ -85,9 +85,9 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ jammy-pgdg main' > /etc/a
 RUN npm install -g rtlcss
 
 # Install Odoo
-ENV ODOO_VERSION 17.0
-ARG ODOO_RELEASE=20240522
-ARG ODOO_SHA=cc1b723a48b09ba80ee737dc10b4b08572811746
+ENV ODOO_VERSION 18.0
+ARG ODOO_RELEASE=20250218
+ARG ODOO_SHA=122896192ed221711dd471d27b2bd2f934c2ec07
 RUN curl -o odoo.deb -sSL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/odoo_${ODOO_VERSION}.${ODOO_RELEASE}_all.deb \
     && echo "${ODOO_SHA} odoo.deb" | sha1sum -c - \
     && apt-get update \
@@ -98,8 +98,7 @@ RUN curl -o odoo.deb -sSL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/od
 COPY ./requirements.txt /
 RUN rm /usr/bin/pip && \
     ln -s /usr/local/bin/pip3 /usr/bin/pip && \
-    pip3 install --upgrade pip && \
-    pip3 install -r /requirements.txt
+    pip3 install -r /requirements.txt --break-system-packages
 
 # copy custom odoo bin
 COPY ./odoo /usr/bin
@@ -112,7 +111,9 @@ COPY ./odoo.conf /etc/odoo/
 # Set permissions and Mount /var/lib/odoo to allow restoring filestore and /mnt/extra-addons for users addons
 RUN chown odoo /etc/odoo/odoo.conf \
     && mkdir -p /mnt/extra-addons \
-    && chown -R odoo /mnt/extra-addons
+    && chown -R odoo /mnt/extra-addons \
+    && chown -R odoo /var/lib/odoo
+
 VOLUME ["/var/lib/odoo", "/mnt/extra-addons"]
 
 # Expose Odoo services
@@ -122,6 +123,9 @@ EXPOSE 8069 8071 8072
 ENV ODOO_RC /etc/odoo/odoo.conf
 
 COPY wait-for-psql.py /usr/local/bin/wait-for-psql.py
+
+# set default bash, for development and debug
+RUN chsh -s /bin/bash odoo
 
 # Set default user when running the container
 USER odoo

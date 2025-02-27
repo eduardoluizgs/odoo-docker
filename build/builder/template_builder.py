@@ -139,7 +139,7 @@ def _write_file(
     #     )
 
     # escreve o arquivo
-    with open(file_path, mode) as f:
+    with open(file_path, mode, encoding='UTF-8') as f:
         f.write(content)
 
 
@@ -160,6 +160,7 @@ def _write_init(
         output_folder,
         module_name,
         'models',
+        'business_entities',
         model_name,
         '__init__.py'
     )
@@ -194,6 +195,7 @@ def _write_model(
         output_folder,
         module_name,
         'models',
+        'business_entities',
         model_name,
         'model.py'
     )
@@ -225,6 +227,7 @@ def _write_business_logic(
         output_folder,
         module_name,
         'models',
+        'business_entities',
         model_name,
         'business_logic.py'
     )
@@ -251,6 +254,7 @@ def _import_model(
         output_folder,
         module_name,
         'models',
+        'business_entities',
         '__init__.py'
     )
 
@@ -298,6 +302,7 @@ def _write_view(
         output_folder,
         module_name,
         'views',
+        'business_entities',
         f'{model_name}_view.xml'
     )
 
@@ -411,6 +416,46 @@ def _build_template_model_and_view(
     _write_security(module_name, model_name, model_description, output_folder)
 
 
+def _build_template_model(
+        module_name: str,
+        model_name: str,
+        model_description: str,
+        output_folder: str
+    ):
+    """Realiza geração de um template com Model.
+
+    Args:
+        module_name (str): Informa o nome do modulo a ser gerado o arquivo.
+        model_name (str): Informa o nome do arquivo a ser gerado.
+        model_description (str): Informa a descrição do modelo a ser gerado.
+        output_folder (str): Informa a pasta de saída do arquivo gerado.
+    """
+    _write_init(module_name, model_name, output_folder)
+    _write_model(module_name, model_name, model_description, output_folder)
+    _write_business_logic(module_name, model_name, output_folder)
+    _import_model(module_name, model_name, output_folder)
+    _write_security(module_name, model_name, model_description, output_folder)
+
+
+def _build_template_view(
+        module_name: str,
+        model_name: str,
+        model_description: str,
+        output_folder: str
+    ):
+    """Realiza geração de um template com View.
+
+    Args:
+        module_name (str): Informa o nome do modulo a ser gerado o arquivo.
+        model_name (str): Informa o nome do arquivo a ser gerado.
+        model_description (str): Informa a descrição do modelo a ser gerado.
+        output_folder (str): Informa a pasta de saída do arquivo gerado.
+    """
+    _write_view(module_name, model_name, model_description, output_folder)
+    _import_view(module_name, model_name, output_folder)
+    _write_security(module_name, model_name, model_description, output_folder)
+
+
 def _parse_args():
     """Captura os argumentos informados pelo usuário na chamada do aplicativo.
 
@@ -446,6 +491,22 @@ def execute(args):
             args.model_description,
             args.output_folder
         )
+    elif args.template_type == 'model':
+        _build_template_model(
+            args.module_name,
+            args.model_name,
+            args.model_description,
+            args.output_folder
+        )
+    elif args.template_type == 'view':
+        _build_template_view(
+            args.module_name,
+            args.model_name,
+            args.model_description,
+            args.output_folder
+        )
+    else:
+        logging.info(f'Tipo de template não localizado {args.template_type or "?"}...')
 
     logging.info('Concluído...')
 

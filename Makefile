@@ -25,7 +25,7 @@ list: ls
 
 build-image:
 	cd ./build/odoo && \
-	docker build -t odoo:development-v17 . && \
+	docker build -t odoo:development-v18 . && \
 	cd ../../
 
 configure:
