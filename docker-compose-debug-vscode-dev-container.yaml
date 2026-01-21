@@ -1,0 +1,48 @@
+networks:
+  odoo:
+    external: true
+    name: odoo_default
+
+services:
+
+  odoo_debug:
+    deploy:
+      restart_policy:
+        condition: 'none'
+      resources:
+        limits:
+          memory: 6000M
+    build:
+      context: ./build/odoo
+      dockerfile: Dockerfile
+    image: ${ODOO_IMAGE}
+    entrypoint: "/entrypoint.sh ${COMMAND:-odoo}"
+    volumes:
+      - ./:/opt/odoo                                             # Odoo Addons Extra
+      # - ./storage:/opt/storage                                 # Odoo Storage
+      - odooapp_cache:/var/lib/odoo                              # Odoo Data
+      - ./build/odoo/odoo-dev-container.conf:/etc/odoo/odoo.conf # Odoo Conf
+      - ./build/odoo/entrypoint.sh:/entrypoint.sh                # Odoo entrypoint
+      - ./build/odoo/odoo:/usr/bin/odoo                          # Odoo Bin
+      # /usr/local/lib                                           # Python Files
+      # /usr/lib/python3/dist-packages/odoo                      # Odoo Modules
+      # /var/log/odoo/odoo.log                                   # Odoo Logs
+    ports:
+      - 8079:8069     # odoo web
+      - 5678:5678     # odoo debug
+      - 9081:8071     # odoo rpc
+      - 9082:8072     # odoo longpolling
+    environment:
+      - HOST=${POSTGRES_HOST}
+      - PORT=${POSTGRES_PORT}
+      - USER=${POSTGRES_USER}
+      - PASSWORD=${POSTGRES_PASSWORD}
+      - DATABASE=${ODOO_DATABASE}
+      - DATABASE_FILTER=${ODOO_DATABASE_FILTER}
+      - DATABASE_INIT=${ODOO_DATABASE_INIT}
+      - MODULES=${ODOO_MODULES}
+      - UPDATE=${ODOO_UPDATE}
+      - ODOO_ENV=${ODOO_ENV}
+
+volumes:
+  odooapp_cache:

@@ -2,7 +2,7 @@
 
 # set server timezone in UTC before time module imported
 __import__('os').environ['TZ'] = 'UTC'
-import odoo
+import odoo.cli
 
 
 # TRICK -> Add this line below for log print in console

@@ -1,0 +1,40 @@
+{
+    "name": "Odoo",
+    "dockerComposeFile": "docker-compose-debug-vscode-dev-container.yaml",
+    "workspaceFolder": "/opt/odoo",
+    "service": "odoo_dev_debug",
+    "remoteUser": "odoo",
+    "updateRemoteUserUID": true,
+    // TIP : Eduardo Luiz - 26/11/2025
+    // talvez esse comando necessite ser executado dentro do container de debug
+    // gerado com o comando `make update` para ajustar a permissão da pasta
+    // /var/lib/odoo/.vscode-server antes de executar o DevContainer.
+    // docker exec -u root -it containerid /bin/bash -c "chmod 777 -R /var/lib/odoo"
+    // "postStartCommand": "chmod 777 -R /var/lib/odoo || true",
+    "shutdownAction": "stopCompose",
+    "containerEnv": {
+      "HOME": "/var/lib/odoo",
+      "PYTHONPATH": "/usr/bin/python3"
+    },
+    "remoteEnv": {
+      "HOME": "/var/lib/odoo"
+    },
+    "customizations": {
+        "vscode": {
+          "extensions": [
+              "amazonwebservices.amazon-q-vscode",
+              "alefragnani.bookmarks",
+              "eprincev-egor.toggle-upper-case",
+              "gruntfuggly.todo-tree",
+              "ms-python.black-formatter",
+              // "ms-python.pylint", // Desativado para evitar conflitos com container Odoo que já possui pylint instalado
+              "ms-python.python",
+              "njpwerner.autodocstring",
+              "oderwat.indent-rainbow",
+              "shardulm94.trailing-spaces",
+              "sydeslyde.open-in-new-instance",
+              "vscode-icons-team.vscode-icons"
+            ]
+        }
+      }
+  }

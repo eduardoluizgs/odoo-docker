@@ -20,6 +20,7 @@ fi
 : ${USER:=${DB_ENV_POSTGRES_USER:=${POSTGRES_USER:='odoo'}}}
 : ${PASSWORD:=${DB_ENV_POSTGRES_PASSWORD:=${POSTGRES_PASSWORD:='odoo'}}}
 
+# add command args
 DB_ARGS=()
 function check_config() {
     param="$1"
@@ -28,21 +29,29 @@ function check_config() {
         value=$(grep -E "^\s*\b${param}\b\s*=" "$ODOO_RC" |cut -d " " -f3|sed 's/["\n\r]//g')
     fi;
     DB_ARGS+=("--${param}")
-    DB_ARGS+=("${value}")
+    if [ "${value}" != "" ] ; then
+      DB_ARGS+=("${value}")
+    fi;
 }
+
 check_config "db_host" "$HOST"
 check_config "db_port" "$PORT"
 check_config "db_user" "$USER"
 check_config "db_password" "$PASSWORD"
 check_config "database" "$DATABASE"
-check_config "db-filter" "$DATABASE_FILTER"
-check_config "dev" "all"
 check_config "log-handler" "odoo.tools.convert:DEBUG"
-
-if [[ "$INIT_DATABASE" == "Y" ]] ; then
+if [[ "$DATABASE_FILTER" != "" ]] ; then
+    check_config "db-filter" "$DATABASE_FILTER"
+fi;
+if [[ "$DATABASE_LIST" == "N" ]] ; then
+    check_config "no-database-list"
+fi;
+if [[ "$ODOO_ENV" == "development" ]] ; then
+    check_config "dev" "all"
+fi;
+if [[ "$DATABASE_INIT" == "Y" ]] ; then
     check_config "init" "base"
 fi;
-
 if [[ "$UPDATE" == "Y" ]] ; then
     check_config "update" "$MODULES"
 fi;
@@ -61,17 +70,22 @@ case "$1" in
         echo "Run Odoo in Debug Mode..."
         exec /usr/bin/python3 -m debugpy --wait-for-client --listen 0.0.0.0:5678 /usr/bin/odoo "${DB_ARGS[@]}"
         ;;
+    test)
+        echo "Run Odoo in Test Mode..."
+        exec /usr/bin/python3 -m debugpy --wait-for-client --listen 0.0.0.0:5678 /usr/bin/odoo "${DB_ARGS[@]}" --test-tags /master_financeiro:TestImportacaoExtratoBancarioController.test_importacao_extrato_infinitepay_file_wizard
+        ;;
     shell)
         echo "Run Odoo in Shell Mode..."
         exec /usr/bin/python3 /usr/bin/odoo shell "${DB_ARGS[@]}"
         ;;
     -*)
         echo "Run Odoo..."
+        wait-for-psql.py ${DB_ARGS[@]} --timeout=30
         exec odoo "$@" "${DB_ARGS[@]}"
         ;;
     *)
         echo "Run Odoo..."
-        exec "$@" "${DB_ARGS[@]}"
+        exec "$@"
 esac
 
 exit 1

@@ -1,13 +1,11 @@
-version: '3.3'
-
 networks:
-  containers-network: # Must be exists in docker
+  odoo:
     external: true
+    name: odoo_default
 
 services:
 
-  odoo_appname_debug:
-    container_name: odoo_appname_debug
+  odoo_debug:
     deploy:
       restart_policy:
         condition: 'none'
@@ -27,25 +25,31 @@ services:
       # - ./storage:/opt/storage                              # Odoo Storage
       - odooapp_cache:/var/lib/odoo                           # Odoo Data
       - ./build/odoo/odoo.conf:/etc/odoo/odoo.conf            # Odoo Conf
-      - ./build/odoo/${ODOO_ENTRYPOINT}:/entrypoint.sh        # Odoo entrypoint
+      - ./build/odoo/entrypoint.sh:/entrypoint.sh             # Odoo entrypoint
       - ./build/odoo/odoo:/usr/bin/odoo                       # Odoo Bin
       # /usr/local/lib                                        # Python Files
       # /usr/lib/python3/dist-packages/odoo                   # Odoo Modules
       # /var/log/odoo/odoo.log                                # Odoo Logs
+      # MIGRACAO : Use estes arquivos para realizar a migração da v16.0 p/ v17.0
+      # - ./build/odoo/addons/mail/data/discuss_channel_data.xml:/usr/lib/python3/dist-packages/odoo/addons/mail/data/discuss_channel_data.xml
+      # - ./build/odoo/addons/auth_signup/views/auth_signup_templates_email.xml:/usr/lib/python3/dist-packages/odoo/addons/auth_signup/views/auth_signup_templates_email.xml
+
     ports:
-      - 8069:8069     # odoo web
-      - 8071:8071     # odoo rpc
-      - 8072:8072     # odoo longpolling
+      - 8079:8069     # odoo web
       - 5678:5678     # odoo debug
+      - 9081:8071     # odoo rpc
+      - 9082:8072     # odoo longpolling
     environment:
-      - HOST=odoo_appname_postgres
-      - PORT=5432
-      - USER=odoo
-      - PASSWORD=odoo
+      - HOST=${POSTGRES_HOST}
+      - PORT=${POSTGRES_PORT}
+      - USER=${POSTGRES_USER}
+      - PASSWORD=${POSTGRES_PASSWORD}
       - DATABASE=${ODOO_DATABASE}
-      - INIT_DATABASE=${INIT_DATABASE}
-      - MODULES=${MODULES}
-      - UPDATE=${UPDATE}
+      - DATABASE_FILTER=${ODOO_DATABASE_FILTER}
+      - DATABASE_INIT=${ODOO_DATABASE_INIT}
+      - MODULES=${ODOO_MODULES}
+      - UPDATE=${ODOO_UPDATE}
+      - ODOO_ENV=${ODOO_ENV}
 
 volumes:
   odooapp_cache:

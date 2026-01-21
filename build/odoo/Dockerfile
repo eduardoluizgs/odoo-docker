@@ -1,5 +1,5 @@
 # ************************************************************************************
-#                                  Odoo 18 Docker
+#                                  Odoo 19.0 Docker
 # ************************************************************************************
 #
 # Odoo Files Reference:
@@ -14,12 +14,12 @@
 # ************************************************************************************
 
 FROM ubuntu:noble
-MAINTAINER Odoo S.A. <info@odoo.com>
+LABEL Odoo=19.0
 
 SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 
 # Generate locale C.UTF-8 for postgres and general locale data
-ENV LANG en_US.UTF-8
+ENV LANG=en_US.UTF-8
 
 # Retrieve the target architecture to install the correct wkhtmltopdf package
 ARG TARGETARCH
@@ -34,6 +34,7 @@ RUN apt-get update && \
         fonts-noto-cjk \
         gnupg \
         libssl-dev \
+        make \
         node-less \
         npm \
         python3-magic \
@@ -85,9 +86,9 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ noble-pgdg main' > /etc/a
 RUN npm install -g rtlcss
 
 # Install Odoo
-ENV ODOO_VERSION 18.0
-ARG ODOO_RELEASE=20250218
-ARG ODOO_SHA=122896192ed221711dd471d27b2bd2f934c2ec07
+ENV ODOO_VERSION=19.0
+ARG ODOO_RELEASE=20260118
+ARG ODOO_SHA=9cb5691e31d2d8831887e85cc07268016f522f4d
 RUN curl -o odoo.deb -sSL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/odoo_${ODOO_VERSION}.${ODOO_RELEASE}_all.deb \
     && echo "${ODOO_SHA} odoo.deb" | sha1sum -c - \
     && apt-get update \
@@ -98,7 +99,9 @@ RUN curl -o odoo.deb -sSL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/od
 COPY ./requirements.txt /
 RUN rm /usr/bin/pip && \
     ln -s /usr/local/bin/pip3 /usr/bin/pip && \
-    pip3 install -r /requirements.txt --break-system-packages
+    pip3 install -r /requirements.txt --break-system-packages && \
+    # TODO : Verificar solução para instalar essa lib diretamente do requirements.txt no futuro
+    pip3 install pydantic==2.12.5 --break-system-packages --no-deps
 
 # copy custom odoo bin
 COPY ./odoo /usr/bin
@@ -109,10 +112,11 @@ COPY ./entrypoint.sh /
 COPY ./odoo.conf /etc/odoo/
 
 # Set permissions and Mount /var/lib/odoo to allow restoring filestore and /mnt/extra-addons for users addons
-RUN chown odoo /etc/odoo/odoo.conf \
+RUN chown odoo:odoo /etc/odoo/odoo.conf \
     && mkdir -p /mnt/extra-addons \
-    && chown -R odoo /mnt/extra-addons \
-    && chown -R odoo /var/lib/odoo
+    && chown -R odoo:odoo /mnt/extra-addons \
+    && mkdir -p /var/lib/odoo \
+    && chown -R odoo:odoo /var/lib/odoo
 
 VOLUME ["/var/lib/odoo", "/mnt/extra-addons"]
 
@@ -120,7 +124,7 @@ VOLUME ["/var/lib/odoo", "/mnt/extra-addons"]
 EXPOSE 8069 8071 8072
 
 # Set the default config file
-ENV ODOO_RC /etc/odoo/odoo.conf
+ENV ODOO_RC=/etc/odoo/odoo.conf
 
 COPY wait-for-psql.py /usr/local/bin/wait-for-psql.py
 

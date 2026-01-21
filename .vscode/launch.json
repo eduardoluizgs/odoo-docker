@@ -2,12 +2,13 @@
   // Use IntelliSense to learn about possible attributes.
   // Hover to view descriptions of existing attributes.
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug/Attach Odoo",
+      "name": "Docker - Odoo Debug/Attach",
       "preLaunchTask": "odoo-debug",
       "postDebugTask": "odoo-debug-stop",
-      "type": "python",
+      "type": "debugpy",
       "request": "attach",
       "connect": {
         "host": "localhost",
@@ -23,12 +24,75 @@
       "justMyCode": false
     },
     {
-      "name": "Run Odoo",
+      "name": "Docker - Odoo Test/Attach",
+      "preLaunchTask": "odoo-test",
+      "postDebugTask": "odoo-debug-stop",
+      "type": "debugpy",
+      "request": "attach",
+      "connect": {
+        "host": "localhost",
+        "port": 5678
+      },
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/addons",
+          "remoteRoot": "/mnt/extra-addons"
+        }
+      ],
+      "logToFile": true,
+      "justMyCode": false
+    },
+    {
+      "name": "Docker - Odoo Run",
       "preLaunchTask": "odoo-run",
       "postDebugTask": "odoo-stop",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "logToFile": true
+    },
+    {
+      "name": "Python - Odoo Debug",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "/usr/bin/python3",
+      "program": "/usr/bin/odoo",
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "args": [
+        "--conf", "/opt/odoo/build/odoo/odoo.conf",
+        "--db_host", "odoo_postgres",
+        "--db_port", "5432",
+        "--db_user", "odoo",
+        "--db_password", "odoo",
+        "--database", "odoo`",
+        "--log-handler", "odoo.tools.convert:DEBUG",
+        "--db-filter", "^odoo.*$",
+        "--dev", "all"
+      ],
+      "stopOnEntry": false,
+      "justMyCode": false
+    },
+    {
+      "name": "Build Odoo Template",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "program": "${workspaceFolder}/build/builder/template_builder.py",
+      "cwd": "${workspaceFolder}/build/builder",
+      "args": [
+        "--template_type",
+        "model-and-view",
+        "--output_folder",
+        "${workspaceFolder}/addons",
+        "--module_name",
+        "odoo_sample_module",
+        "--model_name",
+        "teste",
+        "--model_description",
+        "Modulo de Teste"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false
     }
   ]
 }

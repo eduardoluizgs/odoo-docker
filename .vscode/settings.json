@@ -1,11 +1,24 @@
 {
-  "file-alias.listFile": "file-alias.json",
-  "search.useIgnoreFiles": false,
-  "search.exclude": {
-    "**/project/odoo/**": true,
-    "**/root/log/**": true,
-    "**/root/storage/**": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [],
+  "python.testing.cwd": "/opt/odoo",
+  "files.watcherExclude": {
+    "**/.venv/**": true,
+    "**/__pycache__/**": true,
+    "**/.mypy_cache/**": true,
+    "**/.pytest_cache/**": true,
+    "**/node_modules/**": true,
+    "**/odoo/**": true
   },
+  "search.exclude": {
+    "**/.venv/**": true,
+    "**/__pycache__/**": true,
+    "**/node_modules/**": true,
+    "**/odoo/**": true,
+    "storage/**": true,
+  },
+  "search.useIgnoreFiles": false,
   "workbench.colorCustomizations": {
     "titleBar.activeBackground": "#714B67",
     "titleBar.border": "#ebe8e8",
