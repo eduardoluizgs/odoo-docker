@@ -1,4 +1,4 @@
-# Odoo 18.0 - Docker Development
+# Odoo 19.0 - Docker Development
 
 Este repositório possui uma estrutura `Docker` para desenvolvimento e degub com o `VSCode`.
 
@@ -55,11 +55,11 @@ Pré-Requisitos:
 
 Primeiro, realize o clone deste repositório para a sua pasta de `projetos/`.
 
-Em seguinda clone o [repositório oficial do Odoo 18.0](https://github.com/odoo/odoo/tree/18.0) para a pasta `root/project`.
+Em seguinda clone o [repositório oficial do Odoo 19.0](https://github.com/odoo/odoo/tree/19.0) para a pasta `root/project`.
 
 ```shell
 cd root/project
-git clone https://github.com/odoo/odoo.git -b 18.0
+git clone https://github.com/odoo/odoo.git -b 19.0
 ```
 
 Em seguida, clonar os repositórios customizados para a pasta `root/project/addons`:
@@ -280,16 +280,16 @@ model.recompute()
 env.cr.commit()
 ```
 
-## Migração da v16.0 p/ v18.0
+## Migração da v16.0 p/ v19.0
 
-Para migrar o banco de dados da versão 16.0 para a versão 18.0, realize o restore do banco dedados (se necessário).
+Para migrar o banco de dados da versão 16.0 para a versão 19.0, realize o restore do banco dedados (se necessário).
 
 Em seguida, descomente as linhas indicadas com `# MIGRACAO : ...` no arquivo `docker-compose-debug-vscode.yaml`.
 
 Em seguida, execute os seguintes comandos no banco de dados:
 
 ```sql
--- realiza ajustes na base para migração da versão v16.0 p/ v18.0
+-- realiza ajustes na base para migração da versão v16.0 p/ v19.0
 delete from ir_model where model = 'mail.channel';
 delete from ir_model where model = 'mail.channel.member';
 delete from ir_model where model = 'ir.server.object.lines';
@@ -301,13 +301,13 @@ Por fim, execute o comando `make update-all`.
 ## Links
 
 * Essencial para trabalhar bem como Odoo:
-  * [Odoo ORM API](https://www.odoo.com/documentation/18.0/developer/reference/backend/orm.html)
-  * [Odoo View](https://www.odoo.com/documentation/18.0/developer/reference/backend/views.html)
-  * [Odoo Actions](https://www.odoo.com/documentation/18.0/developer/reference/backend/actions.html)
+  * [Odoo ORM API](https://www.odoo.com/documentation/19.0/developer/reference/backend/orm.html)
+  * [Odoo View](https://www.odoo.com/documentation/19.0/developer/reference/backend/views.html)
+  * [Odoo Actions](https://www.odoo.com/documentation/19.0/developer/reference/backend/actions.html)
 * Instalação:
   * [Odoo Get Starter Repository](https://github.com/eduardoluizgs/OdooGetStarter)
   * [Odoo Docker Hub](https://hub.docker.com/_/odoo)
-  * [Odoo Standalone Install](https://www.odoo.com/documentation/18.0/administration/install.html)
+  * [Odoo Standalone Install](https://www.odoo.com/documentation/19.0/administration/install.html)
   * [Install Odoo 16 using Docker, Nginx on Ubuntu 22.04](https://www.cloudbooklet.com/install-odoo-16-using-docker-nginx-on-ubuntu-22-04/)
 * Documentação:
-  * [Odoo Docs](https://www.odoo.com/documentation/18.0/developer.html)
+  * [Odoo Docs](https://www.odoo.com/documentation/19.0/developer.html)
