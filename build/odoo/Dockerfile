@@ -15,6 +15,7 @@
 
 FROM ubuntu:noble
 LABEL Odoo=19.0
+LABEL maintainer="Odoo S.A. <info@odoo.com>"
 
 SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 
@@ -87,21 +88,22 @@ RUN npm install -g rtlcss
 
 # Install Odoo
 ENV ODOO_VERSION=19.0
-ARG ODOO_RELEASE=20260118
-ARG ODOO_SHA=9cb5691e31d2d8831887e85cc07268016f522f4d
+ARG ODOO_RELEASE=20260513
+ARG ODOO_SHA=fa6a77178b629c7b65e55e5579188588c59a74cc
 RUN curl -o odoo.deb -sSL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/odoo_${ODOO_VERSION}.${ODOO_RELEASE}_all.deb \
     && echo "${ODOO_SHA} odoo.deb" | sha1sum -c - \
     && apt-get update \
     && apt-get -y install --no-install-recommends ./odoo.deb \
     && rm -rf /var/lib/apt/lists/* odoo.deb
 
+# TODO : Requisitos estão quebrando a imagem docker, verificar no futuro
 # install custom requirements
-COPY ./requirements.txt /
-RUN rm /usr/bin/pip && \
-    ln -s /usr/local/bin/pip3 /usr/bin/pip && \
-    pip3 install -r /requirements.txt --break-system-packages && \
+# COPY ./requirements.txt /
+# RUN rm /usr/bin/pip && \
+    # ln -s /usr/local/bin/pip3 /usr/bin/pip && \
+    # pip3 install -r /requirements.txt --break-system-packages && \
     # TODO : Verificar solução para instalar essa lib diretamente do requirements.txt no futuro
-    pip3 install pydantic==2.12.5 --break-system-packages --no-deps
+    # pip3 install pydantic==2.12.5 --break-system-packages --no-deps
 
 # copy custom odoo bin
 COPY ./odoo /usr/bin
@@ -111,12 +113,15 @@ RUN chmod +x /usr/bin/odoo
 COPY ./entrypoint.sh /
 COPY ./odoo.conf /etc/odoo/
 
+# Cria o usuário e o grupo odoo
+# RUN adduser --system --quiet --group --home=/var/lib/odoo --shell=/bin/bash odoo
+
 # Set permissions and Mount /var/lib/odoo to allow restoring filestore and /mnt/extra-addons for users addons
-RUN chown odoo:odoo /etc/odoo/odoo.conf \
+RUN chown odoo /etc/odoo/odoo.conf \
     && mkdir -p /mnt/extra-addons \
-    && chown -R odoo:odoo /mnt/extra-addons \
+    && chown -R odoo /mnt/extra-addons \
     && mkdir -p /var/lib/odoo \
-    && chown -R odoo:odoo /var/lib/odoo
+    && chown -R odoo /var/lib/odoo
 
 VOLUME ["/var/lib/odoo", "/mnt/extra-addons"]
 

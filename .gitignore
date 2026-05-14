@@ -150,4 +150,6 @@ odoo/*
 !odoo/.gitkeep
 storage/*
 !storage/.gitkeep
+docs/*
+!docs/.gitkeep
 *.orig

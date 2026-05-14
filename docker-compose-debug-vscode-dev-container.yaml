@@ -28,10 +28,10 @@ services:
       # /usr/lib/python3/dist-packages/odoo                      # Odoo Modules
       # /var/log/odoo/odoo.log                                   # Odoo Logs
     ports:
-      - 8079:8069     # odoo web
+      - 8069:8069     # odoo web
       - 5678:5678     # odoo debug
-      - 9081:8071     # odoo rpc
-      - 9082:8072     # odoo longpolling
+      - 9071:8071     # odoo rpc
+      - 9072:8072     # odoo longpolling
     environment:
       - HOST=${POSTGRES_HOST}
       - PORT=${POSTGRES_PORT}

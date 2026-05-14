@@ -35,10 +35,10 @@ services:
       # - ./build/odoo/addons/auth_signup/views/auth_signup_templates_email.xml:/usr/lib/python3/dist-packages/odoo/addons/auth_signup/views/auth_signup_templates_email.xml
 
     ports:
-      - 8079:8069     # odoo web
+      - 8069:8069     # odoo web
       - 5678:5678     # odoo debug
-      - 9081:8071     # odoo rpc
-      - 9082:8072     # odoo longpolling
+      - 8071:8071     # odoo rpc
+      - 8072:8072     # odoo longpolling
     environment:
       - HOST=${POSTGRES_HOST}
       - PORT=${POSTGRES_PORT}
