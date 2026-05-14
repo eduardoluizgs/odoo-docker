@@ -86,7 +86,11 @@ Após builda a imagem e suba o projeto:
 ```shell
 make build-image
 docker compose up -d
+make init-database
 ```
+
+Internal Server Error
+KeyError: 'ir.http'
 
 Para finalizar, teste o acesso a aplicação acessando o endereço [http://localhost:8069](http://localhost:8069) com o usuário `admin` e senha `admin`.
 
