@@ -36,7 +36,7 @@ Caso queira executar rapidamente o `Odoo` para testes de interface, [clique aqui
 
 Pré-Requisitos:
 - [Ubuntu 22.04](https://ubuntubr.com.br/download/) ou [WSL2](https://learn.microsoft.com/pt-br/windows/wsl/install) se você estiver no Windows.
-- [Docker Engine](#docker)
+- [Docker Engine](#Preparando-o-ambiente)
 - [VSCode](https://code.visualstudio.com/Download)
   - [Remote WSL Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl)
     - _Necessário caso esteja executando o projeto dentro do WSL_
@@ -69,8 +69,8 @@ sudo docker ps # verifique se o docker está rodando
 sudo groupadd docker
 sudo usermod -aG docker $USER
 
-# reinicie o sistema e veja se o docker ja roda em o sudo
-docker ps
+# reinicie o sistema
+docker ps # veja se o docker ja roda em o sudo
 ```
 
 ## Preparando o projeto
@@ -88,9 +88,6 @@ make build-image
 docker compose up -d
 make init-database
 ```
-
-Internal Server Error
-KeyError: 'ir.http'
 
 Para finalizar, teste o acesso a aplicação acessando o endereço [http://localhost:8069](http://localhost:8069) com o usuário `admin` e senha `admin`.
 
